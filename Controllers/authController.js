@@ -1,5 +1,6 @@
 import Doctor from '../models/DoctorSchema.js'
 import User from '../models/UserSchema.js'
+import Admin from '../models/AdminSchema.js'
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcryptjs'
 
@@ -21,6 +22,7 @@ export const register = async(req,res)=>{
         else if(role ==='doctor'){
             user = await Doctor.findOne({email})
         }
+        
 
         if(user){
             return res.status(400).json({message:' User already exist'})
@@ -38,13 +40,20 @@ export const register = async(req,res)=>{
                 role
             });
          }
-         if(role ==='Doctor'){
+         if(role ==='doctor'){
             user = new Doctor({
                 name,
                 email,
                 password: hashPasssword,
                 photo,
                 gender,
+                role
+            });
+         }
+         if(role ==='admin'){
+            user = new Admin({
+                email,
+                password: hashPasssword,
                 role
             });
          }
@@ -66,11 +75,14 @@ export const login = async (req, res)=>{
 
         const patient = await User.findOne({email});
         const doctor = await Doctor.findOne({email});
+        const admin = await Admin.findOne({email});
         if(patient){
             user= patient;
         } 
         if(doctor) {
             user= doctor;
+        }if(admin) {
+            user= admin;
         }
         if(!user) return res.status(404).json({ message:"User not found"});
 

@@ -2,6 +2,7 @@ import jwt from "jsonwebtoken";
 import Doctor from "../models/DoctorSchema.js";
 import User from "../models/UserSchema.js";
 
+
 export const authenticate = async (req, res, next)=>{
     const authToken = req.headers.authorization;
 
@@ -20,7 +21,7 @@ export const authenticate = async (req, res, next)=>{
         if(error.name === "TokenExpiredError"){
             return res.status(401).json({messega:"Token is expired"});
         }
-        return res.status(401).json({ success:failes,messega:"Invalid token"});     
+        return res.status(401).json({ success:false,messega:"Invalid token"});     
     }
 };
 
@@ -30,13 +31,15 @@ export const restrict = roles=> async (req, res, next)=>{
     let user;
 
     const patient = await User.findById(userId);
+    // const admin = await User.findById(userId);
     const doctor = await Doctor.findById(userId);
+   
 
     if(patient){
         user = patient;
     }
     if(doctor){
-        user= doctor;
+        user = doctor;
     }
     if(!roles.includes(user.role)){
         return res.status(401).json({success: false, message:"You're not authorized"});
