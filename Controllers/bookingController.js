@@ -34,26 +34,41 @@ export const createBooking = async (req, res) => {
 // Controller to get all bookings
 export const getAllBookings = async (req, res) => {
     try {
-        const bookings = await Booking.find({ isApproved:['approved','pending'], });
+        const bookings = await Booking.find();
         res.status(200).json({ success: true, data: bookings });
     } catch (error) {
         console.error('Error fetching bookings:', error);
         res.status(500).json({ success: false, message: 'An error occurred while fetching bookings' });
     }
 };
-// export const deleteUser = async (req,res)=>{
-//     const id = req.params.id;
 
-//     try {
-//         const deleteUser = await User.findByIdAndDelete(
-//             id,
-//         ).select('-password');
-//         res.status(200).json({success:true,message:"Successfully deleted",data: deleteUser});
-//     } catch (error) {
-//         res.status(500).json({success:false,message:"Failed delete"});
+
+export const getOneBookings = async (req, res) => {
+    try {
+        const bookingId = req.params.bookingId; // Assuming the parameter is named bookingId
+        const booking = await Booking.findOne({ _id: bookingId });
+        if (!booking) {
+            return res.status(404).json({ success: false, message: 'Booking not found' });
+        }
+        res.status(200).json({ success: true, data: booking });
+    } catch (error) {
+        console.error('Error fetching booking:', error);
+        res.status(500).json({ success: false, message: 'An error occurred while fetching booking' });
+    }
+};
+export const deleteBooking = async (req,res)=>{
+    const id = req.params.id;
+
+    try {
+        const deleteBooking = await Booking.findByIdAndDelete(
+            id,
+        ).select('-password');
+        res.status(200).json({success:true,message:"Successfully deleted",data: deleteBooking});
+    } catch (error) {
+        res.status(500).json({success:false,message:"Failed delete"});
         
-//     }
-// };
+    }
+};
 export const updatIsApproved = async (req,res)=>{
     const id = req.params.id;
 

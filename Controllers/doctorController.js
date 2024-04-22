@@ -56,7 +56,7 @@ export const getAllDoctor = async (req,res)=>{
             ],
         }).select('-password');
         }else{
-             doctors = await Doctor.find({isApproved:'approved'}).select('-password');
+             doctors = await Doctor.find().select('-password');
 
         }
         res.status(200).json({success:true,message:"Doctors found",data: doctors});

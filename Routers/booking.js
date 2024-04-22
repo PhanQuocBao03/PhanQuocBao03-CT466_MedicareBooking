@@ -1,11 +1,13 @@
 import express from "express";
 import {authenticate,restrict } from "../auth/verifyToken.js";
-import { createBooking, getAllBookings,updatIsApproved} from "../Controllers/bookingController.js";
+import { createBooking, deleteBooking, getAllBookings,getOneBookings,updatIsApproved} from "../Controllers/bookingController.js";
 
 
 const router = express.Router();
 
-router.get("/",getAllBookings)
+router.get("/getAllBookings",getAllBookings)
+router.get("/:bookingId",getOneBookings)
+router.delete("/:id",deleteBooking)
 router.post("/checkout-session/:doctorId",authenticate,restrict(['patient']),createBooking);
 router.put("/:id",authenticate,updatIsApproved);
 

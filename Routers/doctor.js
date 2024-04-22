@@ -13,8 +13,8 @@ router.use("/:doctorId/reviews",reviewRouter);
 
 router.get("/",getAllDoctor);
 router.get("/:id", getSingleDoctor);
-router.delete("/:id",authenticate,restrict(['doctor']) ,deleteDoctor);
-router.put("/:id",authenticate, restrict(['doctor']),updateDoctor);
-router.get("/profile/me", authenticate, restrict(['doctor']),getDoctorProfile);
+router.delete("/:id",authenticate,restrict(['doctor','admin']) ,deleteDoctor);
+router.put("/:id",authenticate, restrict(['doctor','admin']),updateDoctor);
+router.get("/profile/me", authenticate, restrict(['doctor','admin']),getDoctorProfile);
 
 export default router;

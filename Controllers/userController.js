@@ -45,14 +45,34 @@ export const getSingleUser = async (req,res)=>{
 };
 export const getAllUser = async (req,res)=>{
     // const id = req.params.id;
-
     try {
-        const users = await User.find({}).select('-password');
+        const {query} = req.query;
+        let users;
+        if(query){
+            users = await User.find({
+            $or:[
+                { name: { $regex: query, $options: 'i' } },
+                { specialization: { $regex: query, $options: 'i' } },
+                // { phone: { $regex: query, $options: 'i' } }
+            ],
+        }).select('-password');
+        }else{
+            users = await User.find().select('-password');
+
+        }
         res.status(200).json({success:true,message:"Users found",data: users});
     } catch (error) {
         res.status(404).json({success:false,message:"Not found"});
         
     }
+
+    // try {
+    //     const users = await User.find({}).select('-password');
+    //     res.status(200).json({success:true,message:"Users found",data: users});
+    // } catch (error) {
+    //     res.status(404).json({success:false,message:"Not found"});
+        
+    // }
 };
 
 export const getUserProfile = async(req, res)=>{

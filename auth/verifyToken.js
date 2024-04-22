@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken";
 import Doctor from "../models/DoctorSchema.js";
 import User from "../models/UserSchema.js";
+import Admin from "../models/AdminSchema.js";
 
 
 export const authenticate = async (req, res, next)=>{
@@ -31,8 +32,8 @@ export const restrict = roles=> async (req, res, next)=>{
     let user;
 
     const patient = await User.findById(userId);
-    // const admin = await User.findById(userId);
     const doctor = await Doctor.findById(userId);
+    const admin = await Admin.findById(userId);
    
 
     if(patient){
@@ -40,6 +41,9 @@ export const restrict = roles=> async (req, res, next)=>{
     }
     if(doctor){
         user = doctor;
+    }
+    if(admin){
+        user = admin;
     }
     if(!roles.includes(user.role)){
         return res.status(401).json({success: false, message:"You're not authorized"});

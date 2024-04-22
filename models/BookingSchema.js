@@ -30,6 +30,8 @@ const bookingSchema = new mongoose.Schema(
     default: "pending",
   },
   appointments: [{ type: mongoose.Types.ObjectId, ref: "Appointment" }],
+  notes: String
+
   },
 
   { timestamps: true }
